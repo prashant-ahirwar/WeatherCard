@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>WeatherCard</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <div class="card">
+
+    <div class="top">
+
+      <div>
+
+        <h1 id="city">
+          Loading...
+        </h1>
+
+        <p class="info">
+
+          <span id="condition">
+            Sunny
+          </span>
+
+          <span
+            class="wind"
+            id="wind"
+          >
+            🍃 Wind: 0 km/h
+          </span>
+
+        </p>
+
+      </div>
+
+      <div class="search-box">
+
+        <button id="searchBtn">
+          🔍
+        </button>
+
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search city..."
+        />
+
+      </div>
+
+    </div>
+
+    <div class="weather-box">
+
+      <!-- Weather Illustration Circle -->
+      <div class="sky">
+
+        <img
+          id="weatherImage"
+          src=""
+          alt="Weather Illustration"
+        />
+
+      </div>
+
+      <span
+        class="temperature"
+        id="temp"
+      >
+        25°C
+      </span>
+
+    </div>
+
+    <div class="extra-info">
+
+      <div class="info-box">
+
+        <h3>
+          Humidity
+        </h3>
+
+        <p id="humidity">
+          --%
+        </p>
+
+      </div>
+
+      <div class="info-box">
+
+        <h3>
+          Feels Like
+        </h3>
+
+        <p id="feelsLike">
+          --°C
+        </p>
+
+      </div>
+
+    </div>
+      <h2>
+        5-Days Forecast
+      </h2>
+    <table>
+
+      <thead>
+
+        <tr class="heading">
+          <td>Day</td>
+          <td>Temp.</td>
+        </tr>
+
+      </thead>
+
+      <tbody id="forecast"></tbody>
+
+    </table>
+
+    <div class="footer">
+
+      <p id="updated">
+        Last updated: --
+      </p>
+
+    </div>
+
+    <div class="creator">
+
+      <p>
+        🎨 Designed by Prashant A.
+      </p>
+
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
