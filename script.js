@@ -83,7 +83,7 @@ async function getWeather(city="Indore") {
   try {
 
     const response = await fetch(
-      `http://localhost:3000/weather?city=${city}`
+      `/weather?city=${city}`
     );
 
     const data = await response.json();
