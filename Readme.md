@@ -62,15 +62,15 @@ weather-app/
 ## How it Works
 
 User searches city
-        ↓
+        ->
 Frontend sends request
-        ↓
+        ->
 Node.js backend fetches WeatherAPI data
-        ↓
+        ->
 Weather condition is analyzed
-        ↓
+        ->
 Matching Cloudinary image is selected
-        ↓
+        ->
 UI updates dynamically
 
 --- 
