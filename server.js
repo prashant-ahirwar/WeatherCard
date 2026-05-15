@@ -2,15 +2,54 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
 dotenv.config();
 
 const app = express();
 
+
+
+/* ---------------- PATH SETUP ---------------- */
+
+const __filename =
+  fileURLToPath(import.meta.url);
+
+const __dirname =
+  path.dirname(__filename);
+
+
+
+/* ---------------- MIDDLEWARE ---------------- */
+
 app.use(cors());
 
-const PORT = 3000;
+app.use(
+  express.static(__dirname)
+);
 
-const API_KEY = process.env.API_KEY;
+
+
+/* ---------------- CONFIG ---------------- */
+
+const PORT =
+  process.env.PORT || 3000;
+
+const API_KEY =
+  process.env.API_KEY;
+
+
+
+/* ---------------- FRONTEND ROUTE ---------------- */
+
+app.get("/", (req, res) => {
+
+  res.sendFile(
+    path.join(__dirname, "index.html")
+  );
+
+});
 
 
 

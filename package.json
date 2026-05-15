@@ -1,10 +1,19 @@
 {
   "name": "weather-app",
   "version": "1.0.0",
+  "description": "Modern weather app with dynamic illustrations",
+  "main": "server.js",
+
   "type": "module",
+
   "scripts": {
     "start": "node server.js"
   },
+
+  "engines": {
+    "node": ">=18"
+  },
+
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
