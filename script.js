@@ -16,16 +16,32 @@ const searchBtn =
 const searchInput =
   document.getElementById("searchInput");
 
+const searchPanel =
+  document.getElementById("searchPanel");
+
+const myLocationBtn =
+  document.getElementById("myLocationBtn");
 
 
-/* ---------------- CLOUDINARY ---------------- */
+
+/* CLOUDINARY */
 
 const CLOUDINARY_BASE =
   "https://res.cloudinary.com/doyst59sb/image/upload/v1778868539/weathers/";
 
 
 
-/* ------------ WEATHER IMAGE MAP ------------ */
+/* STATE */
+
+let isManualSearch = false;
+
+let currentCoords = null;
+
+let lastFetch = "";
+
+
+
+/* WEATHER IMAGE */
 
 function getWeatherImage(condition, isDay){
 
@@ -39,24 +55,15 @@ function getWeatherImage(condition, isDay){
     return `${CLOUDINARY_BASE}sunny.png`;
   }
 
-  if(
-    text.includes("cloud") ||
-    text.includes("overcast")
-  ){
+  if(text.includes("cloud") || text.includes("overcast")){
     return `${CLOUDINARY_BASE}cloudy.png`;
   }
 
-  if(
-    text.includes("rain") ||
-    text.includes("drizzle")
-  ){
+  if(text.includes("rain") || text.includes("drizzle")){
     return `${CLOUDINARY_BASE}rainy.png`;
   }
 
-  if(
-    text.includes("storm") ||
-    text.includes("thunder")
-  ){
+  if(text.includes("storm") || text.includes("thunder")){
     return `${CLOUDINARY_BASE}storm.png`;
   }
 
@@ -64,10 +71,7 @@ function getWeatherImage(condition, isDay){
     return `${CLOUDINARY_BASE}snow.png`;
   }
 
-  if(
-    text.includes("mist") ||
-    text.includes("fog")
-  ){
+  if(text.includes("mist") || text.includes("fog")){
     return `${CLOUDINARY_BASE}mist-foggy.png`;
   }
 
@@ -76,17 +80,76 @@ function getWeatherImage(condition, isDay){
 
 
 
-/* ---------------- GET WEATHER ---------------- */
+/* RENDER WEATHER */
 
-async function getWeather(city="Indore") {
+function renderWeather(data){
 
-  try {
-
-    const response = await fetch(
-      `/weather?city=${city}`
+  weatherImage.src =
+    getWeatherImage(
+      data.current.condition.text,
+      data.current.is_day
     );
 
-    const data = await response.json();
+  cityEl.textContent =
+    `${data.location.name}, ${data.location.region}`;
+
+  conditionEl.textContent =
+    data.current.condition.text;
+
+  windEl.textContent =
+    `🍃 Wind: ${data.current.wind_kph} km/h`;
+
+  tempEl.textContent =
+    `${Math.round(data.current.temp_c)}°C`;
+
+  humidityEl.textContent =
+    `${data.current.humidity}%`;
+
+  feelsLikeEl.textContent =
+    `${Math.round(data.current.feelslike_c)}°C`;
+
+  updatedEl.textContent =
+    `Last updated: ${data.current.last_updated}`;
+
+  forecastEl.innerHTML = "";
+
+  data.forecast.forecastday.forEach(day => {
+
+    const date =
+      new Date(day.date);
+
+    const dayName =
+      date.toLocaleDateString(
+        "en-US",
+        { weekday:"short" }
+      );
+
+    forecastEl.innerHTML += `
+      <tr>
+        <td>${dayName}</td>
+        <td>${Math.round(day.day.avgtemp_c)}°C</td>
+      </tr>
+    `;
+  });
+}
+
+
+
+/* GET WEATHER */
+
+async function getWeather(city){
+
+  if(city === lastFetch) return;
+
+  lastFetch = city;
+
+  try{
+
+    const response =
+      await fetch(`/weather?city=${city}`);
+
+    const data =
+      await response.json();
 
     if(data.error){
 
@@ -96,67 +159,9 @@ async function getWeather(city="Indore") {
       return;
     }
 
+    renderWeather(data);
 
-
-    /* ------------ WEATHER IMAGE ------------ */
-
-    const imageUrl = getWeatherImage(
-      data.current.condition.text,
-      data.current.is_day
-    );
-
-    weatherImage.src = imageUrl;
-
-
-
-    /* ------------ WEATHER INFO ------------ */
-
-    cityEl.textContent =
-      `${data.location.name}, ${data.location.region}`;
-
-    conditionEl.textContent =
-      data.current.condition.text;
-
-    windEl.textContent =
-      `🍃 Wind: ${data.current.wind_kph} km/h`;
-
-    tempEl.textContent =
-      `${Math.round(data.current.temp_c)}°C`;
-
-    humidityEl.textContent =
-      `${data.current.humidity}%`;
-
-    feelsLikeEl.textContent =
-      `${Math.round(data.current.feelslike_c)}°C`;
-
-    updatedEl.textContent =
-      `Last updated: ${data.current.last_updated}`;
-
-
-
-    /* ------------ FORECAST ------------ */
-
-    forecastEl.innerHTML = "";
-
-    data.forecast.forecastday.forEach(day => {
-
-      const date = new Date(day.date);
-
-      const dayName =
-        date.toLocaleDateString(
-          "en-US",
-          { weekday:"short" }
-        );
-
-      forecastEl.innerHTML += `
-        <tr>
-          <td>${dayName}</td>
-          <td>${Math.round(day.day.avgtemp_c)}°C</td>
-        </tr>
-      `;
-    });
-
-  } catch(error){
+  }catch(error){
 
     console.log(error);
 
@@ -167,17 +172,100 @@ async function getWeather(city="Indore") {
 
 
 
-/* ---------------- SEARCH ---------------- */
+/* LOCATION */
+
+function getCurrentLocation(){
+
+  cityEl.textContent =
+    "📍 Detecting location...";
+
+  navigator.geolocation.getCurrentPosition(
+
+    (position) => {
+
+      isManualSearch = false;
+
+      currentCoords = {
+
+        lat:position.coords.latitude,
+        lon:position.coords.longitude
+      };
+
+      getWeather(
+        `${currentCoords.lat},${currentCoords.lon}`
+      );
+
+    },
+
+    () => {
+
+      cityEl.textContent =
+        "Location access denied";
+    },
+
+    {
+      enableHighAccuracy:true,
+      maximumAge:300000
+    }
+
+  );
+}
+
+
+
+/* LIVE TRACKING */
+
+navigator.geolocation.watchPosition(
+
+  (position) => {
+
+    if(isManualSearch) return;
+
+    const lat =
+      position.coords.latitude;
+
+    const lon =
+      position.coords.longitude;
+
+    if(
+      currentCoords &&
+      Math.abs(lat - currentCoords.lat) < 0.01 &&
+      Math.abs(lon - currentCoords.lon) < 0.01
+    ){
+      return;
+    }
+
+    currentCoords = { lat, lon };
+
+    getWeather(`${lat},${lon}`);
+
+  },
+
+  null,
+
+  {
+    enableHighAccuracy:false,
+    maximumAge:300000,
+    timeout:10000
+  }
+
+);
+
+
+
+/* SEARCH */
 
 searchBtn.addEventListener("click", () => {
 
-  searchInput.classList.toggle("active");
+  searchPanel.classList.toggle("active");
 
   searchInput.focus();
 
 });
 
 
+
+/* SEARCH CITY */
 
 searchInput.addEventListener("keydown", (e) => {
 
@@ -188,17 +276,36 @@ searchInput.addEventListener("keydown", (e) => {
 
     if(city){
 
+      isManualSearch = true;
+
+      cityEl.textContent =
+        `🔍 Detecting ${city}...`;
+
       getWeather(city);
 
       searchInput.value = "";
 
-      searchInput.classList.remove("active");
+      searchPanel.classList.remove("active");
     }
   }
 });
 
 
 
-/* ---------------- INITIAL LOAD ---------------- */
+/* MY LOCATION */
 
-getWeather();
+myLocationBtn.addEventListener(
+  "click",
+  () => {
+
+    searchPanel.classList.remove("active");
+
+    getCurrentLocation();
+  }
+);
+
+
+
+/* INITIAL LOAD */
+
+getCurrentLocation();

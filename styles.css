@@ -18,7 +18,9 @@ body{
   min-height:100vh;
   display:grid;
   place-items:center;
+
   padding:20px;
+
   font-family:var(--font);
 
   background:linear-gradient(
@@ -30,12 +32,21 @@ body{
 
 .card{
   width:340px;
+
   padding:20px;
+
   border-radius:24px;
+
   background:var(--bg);
+
   border:2px solid #00000010;
+
   box-shadow:var(--shadow);
 }
+
+
+
+/* TOP */
 
 .top{
   display:flex;
@@ -47,15 +58,24 @@ body{
   position:relative;
 }
 
+
+
+/* SEARCH */
+
 #searchBtn{
   width:42px;
   height:42px;
+
   border:none;
   border-radius:50%;
+
   background:var(--primary);
-  color:#fff;
+  color:white;
+
   font-size:1rem;
+
   cursor:pointer;
+
   transition:.2s ease;
 }
 
@@ -63,45 +83,94 @@ body{
   transform:scale(1.08);
 }
 
-#searchInput{
+
+
+/* SEARCH PANEL */
+
+#searchPanel{
   position:absolute;
-  top:50px;
+
+  top:55px;
   right:0;
 
-  width:0;
-  opacity:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 
-  padding:10px;
+  opacity:0;
+  visibility:hidden;
+
+  transform:translateY(-10px);
+
+  transition:.25s ease;
+
+  z-index:10;
+}
+
+#searchPanel.active{
+  opacity:1;
+  visibility:visible;
+
+  transform:translateY(0);
+}
+
+#searchInput{
+  width:190px;
+
+  padding:12px;
 
   border:none;
-  border-radius:12px;
+  border-radius:14px;
 
   outline:none;
 
   font-family:var(--font);
 
-  transition:.3s ease;
+  box-shadow:0 5px 12px rgba(0,0,0,.08);
 }
 
-#searchInput.active{
-  width:180px;
-  opacity:1;
+#myLocationBtn{
+  padding:10px;
+
+  border:none;
+  border-radius:14px;
+
+  background:var(--primary);
+  color:white;
+
+  font-family:var(--font);
+
+  cursor:pointer;
+
+  transition:.2s ease;
 }
+
+#myLocationBtn:hover{
+  transform:scale(1.03);
+}
+
+
+
+/* TEXT */
 
 h1{
   color:var(--primary);
   font-size:2rem;
 }
+
 h2{
   margin-top:10px;
   margin-left:60px;
+
   color:var(--primary);
   font-size:1.5rem;
-
 }
+
 .info{
   margin-top:6px;
+
   color:var(--primary);
+
   font-size:.95rem;
   line-height:1.5;
 }
@@ -110,6 +179,10 @@ h2{
   margin-left:8px;
   opacity:.7;
 }
+
+
+
+/* WEATHER */
 
 .weather-box{
   display:flex;
@@ -127,6 +200,7 @@ h2{
   border:3px solid var(--primary);
 
   overflow:hidden;
+
   background:#c8ecff;
 
   display:flex;
@@ -137,28 +211,39 @@ h2{
 #weatherImage{
   width:100%;
   height:100%;
+
   object-fit:cover;
+
+  transition:.3s ease;
 }
 
 .temperature{
   font-size:4rem;
   font-weight:700;
+
   color:var(--primary);
 }
+
+
+
+/* EXTRA INFO */
 
 .extra-info{
   display:flex;
   gap:12px;
-  justify-content:space-between;
 
   margin-top:24px;
 }
 
 .info-box{
   flex:1;
+
   padding:14px;
+
   text-align:center;
-  background:#fff;
+
+  background:white;
+
   border-radius:18px;
 }
 
@@ -169,23 +254,28 @@ h2{
 
 .info-box p{
   margin-top:6px;
+
   font-size:1.2rem;
   font-weight:700;
 }
+
+
+
+/* TABLE */
 
 table{
   width:100%;
   margin-top:12px;
 
+  border-collapse:collapse;
+
   overflow:hidden;
   border-radius:16px;
-  border-collapse:collapse;
 }
 
 .heading{
   background:var(--primary);
-  color:#fff;
-  font-weight:700;
+  color:white;
 }
 
 td{
@@ -201,8 +291,13 @@ tbody tr:nth-child(odd){
   background:#fffdf0;
 }
 
+
+
+/* FOOTER */
+
 .footer{
   margin-top:20px;
+
   padding:12px;
 
   text-align:center;
@@ -216,7 +311,9 @@ tbody tr:nth-child(odd){
 
 .creator{
   margin-top:14px;
+
   text-align:center;
+
   color:var(--primary);
   font-size:.9rem;
 }
